@@ -1,26 +1,25 @@
 package com.buddies.todo.Service.Impl;
 
-import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.buddies.todo.Entity.User;
 import com.buddies.todo.Repository.IUserRepository;
 import com.buddies.todo.Service.IUserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
+import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 	
 	private final IUserRepository userRepository;
 
-    @Autowired
-    public UserServiceImpl(IUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-    
 	@Override
-	public String getUserById()
+	public User getUserById(final String userId)
 	{
-		return "working";
+		log.info("Getting {}...", userId);
+
+		return userRepository.findById(new ObjectId(userId)).orElse(null);
 	}
 }
