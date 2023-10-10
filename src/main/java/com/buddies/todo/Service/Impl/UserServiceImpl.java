@@ -8,6 +8,8 @@ import com.mongodb.DuplicateKeyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
+
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +35,31 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User createUser(User user){
+		
 		User existingUser = userRepository.findByEmail(user.getEmail());
 		if (existingUser != null) {
 			return null;
 		}
 		logger.info(" Creating a new User");
 		return userRepository.save(user);
+	}
+	
+	@Override
+	public User login(String email, String password) {
+		
+		
+		Optional<User> s = Optional.of(userRepository.findByEmail(email));
+		if (s.isPresent()) {
+			User value = s.get();
+		    if(password.equals(value.getPassword())){
+			   return value;
+		    }
+		    else
+		    {
+		    	return null;
+		    }
+		}
+		return null;
+		    
 	}
 }
