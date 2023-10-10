@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +25,11 @@ public class UserController {
 	@GetMapping(value = "/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         return Optional.ofNullable(userService.getUserById(id)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+	
+	@PostMapping(value="/createUser")
+	public ResponseEntity<User> createUser(@RequestBody User user){
+        return Optional.ofNullable(userService.createUser(user)).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 	
 }
