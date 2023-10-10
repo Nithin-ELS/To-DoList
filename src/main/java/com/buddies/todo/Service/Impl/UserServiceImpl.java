@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserServiceImpl implements IUserService {
 	
-	private final IUserRepository userRepository;
+	private  IUserRepository userRepository;
 
 	@Override
 	public User getUserById(final String userId)
 	{
-		log.info("Getting {}...", userId);
+//		log.info("Getting {}...", userId);
 
 		return userRepository.findById(new ObjectId(userId)).orElse(null);
 	}

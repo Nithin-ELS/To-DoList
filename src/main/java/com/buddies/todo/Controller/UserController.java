@@ -18,7 +18,7 @@ import java.util.Optional;
 public class UserController {
 	
 	@Autowired
-	private final IUserService userService;
+	private  IUserService userService;
 
 	@GetMapping(value = "/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
