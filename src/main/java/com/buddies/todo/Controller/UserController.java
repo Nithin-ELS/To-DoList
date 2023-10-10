@@ -36,13 +36,13 @@ public class UserController {
 	
 	@GetMapping("/login")
 	public ResponseEntity<User> login(@RequestParam("email") String email, @RequestParam("pass") String pass) {
-	  User register = userService.login(email, pass);
-	  if(register!=null) {
-		  return new ResponseEntity<User>(register,HttpStatus.OK);
+	  User user = userService.login(email, pass);
+	  if(user!=null) {
+		  return new ResponseEntity<User>(user,HttpStatus.OK);
 	  }
 	  else
 	  {
-		  return new ResponseEntity<User>(register,HttpStatus.PARTIAL_CONTENT);
+		  return new ResponseEntity<User>(user,HttpStatus.PARTIAL_CONTENT);
 	  }
 	}
 }
