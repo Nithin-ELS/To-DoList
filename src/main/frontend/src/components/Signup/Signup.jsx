@@ -70,7 +70,7 @@ const Signup = () => {
                             },
                           ]}
                     >
-                        <Input/>
+                        <Input type="password"/>
                     </Form.Item>
                     <Form.Item
                         label="Confirm Password"
@@ -82,7 +82,7 @@ const Signup = () => {
                             },
                           ]}
                     >
-                        <Input/>
+                        <Input type="password"/>
                     </Form.Item>
                     <Button type="primary" htmlType="Submit" size="large">Signup</Button>
                 </Form>
