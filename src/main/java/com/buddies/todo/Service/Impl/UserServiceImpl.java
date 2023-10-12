@@ -1,20 +1,18 @@
 package com.buddies.todo.Service.Impl;
 
+import com.buddies.todo.Entity.UpdatePasswordDTO;
 import com.buddies.todo.Entity.User;
 import com.buddies.todo.Repository.IUserRepository;
 import com.buddies.todo.Service.IUserService;
-import com.mongodb.DuplicateKeyException;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
-
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -62,4 +60,20 @@ public class UserServiceImpl implements IUserService {
 		return null;
 		    
 	}
+
+	@Override
+	public String updatePassword(UpdatePasswordDTO updatePasswordDTO) {
+		User user = userRepository.findByEmail(updatePasswordDTO.getEmail());
+		if(user != null) {
+			if(user.getPassword().equals(updatePasswordDTO.getCurrentPassword())) {
+				user.setPassword(updatePasswordDTO.getNewPassword());
+				userRepository.save(user);
+				return "Password Updated";
+			} else {
+				return "Unauthorised access";
+			}
+		}
+		return "User not found";
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.buddies.todo.Controller;
 
+import com.buddies.todo.Entity.UpdatePasswordDTO;
 import com.buddies.todo.Entity.User;
 import com.buddies.todo.Service.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +48,11 @@ public class UserController {
 	  {
 		  return new ResponseEntity<User>(user,HttpStatus.PARTIAL_CONTENT);
 	  }
+	}
+
+	@PostMapping("updatePassword")
+	public ResponseEntity<String> updatePassword(@RequestBody UpdatePasswordDTO updatePasswordDTO) {
+		String message = userService.updatePassword(updatePasswordDTO);
+		return new ResponseEntity<String>(message, HttpStatus.OK);
 	}
 }
