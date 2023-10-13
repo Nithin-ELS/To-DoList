@@ -4,11 +4,11 @@ import FormItem from "antd/es/form/FormItem";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import instance from "../../common/AxiosInstance";
 import { useState } from "react";
+import Password from "antd/es/input/Password";
 
 const apiURL = "/api/user/login?";
 
 function Login() {
-  // localStorage.clear();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,17 +31,44 @@ function Login() {
         })
         .then((response) => {
           if (response.status === 200) {
-            // localStorage.setItem("email", JSON.stringify(response.data.email));
             alert("login successful");
-          } else alert("Invalid creds");
+          } else {
+            alert("Invalid creds");
+          }
         });
     } catch (error) {
       console.error("Network error:" + error);
     }
   };
 
+  // const validatePassword = (rule, value) => {
+  //   return new Promise((resolve, reject) => {
+  //     if (value && value.length >= 8) {
+  //       resolve();
+  //     } else {
+  //       reject("Password must be atleast 8 characters long");
+  //     }
+  //   });
+  // };
+
+  const validatePassword = (rule, value) => {
+    return new Promise((resolve, reject) => {
+      if (!value) {
+        reject("Password is required");
+      } else if (
+        !/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])\S{8,}$/.test(value)
+      ) {
+        reject(
+          "Password must meet the requirements: 8 characters, at least 1 uppercase, 1 lowercase, 1 number, and 1 special character. No spaces allowed."
+        );
+      } else {
+        resolve();
+      }
+    });
+  };
+
   return (
-    <Space style={{ marginTop: 300 }}>
+    <Space style={{ marginTop: 150 }}>
       <Card style={{ backgroundColor: "#d9d9d9" }}>
         <Form name="login_form" className="login-form" onFinish={handleLogin}>
           <h1 style={{ color: "#2f54eb" }}>Login</h1>
@@ -52,15 +79,13 @@ function Login() {
           >
             <Input
               prefix={<UserOutlined />}
+              type="email"
               placeholder="Email"
               onChange={handleEmailChange}
             />
           </Form.Item>
 
-          <Form.Item
-            name="password"
-            rules={[{ required: true, message: "Please input your Password!" }]}
-          >
+          <Form.Item name="password" rules={[{ validator: validatePassword }]}>
             <Input
               prefix={<LockOutlined />}
               type="password"
