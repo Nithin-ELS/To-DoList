@@ -2,9 +2,9 @@ import axios from "axios";
 import { Form, Input, Button, Space, Card } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import instance from "../../common/AxiosInstance";
 import { useState } from "react";
-import Password from "antd/es/input/Password";
+import { BASE_URL } from "../../common/Constants";
+
 
 const apiURL = "/api/user/login?";
 
@@ -22,8 +22,8 @@ function Login() {
 
   const handleLogin = async (e) => {
     try {
-      await instance
-        .get(apiURL, {
+      await axios
+        .get(BASE_URL +apiURL, {
           params: {
             email: email,
             pass: password,

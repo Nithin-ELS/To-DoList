@@ -1,14 +1,40 @@
 import { React } from "react";
 import { Space, Card, Button, Form, Input} from "antd";
 import './Signup.css';
+import axios from "axios";
+import { BASE_URL } from "../../common/Constants";
+
 const Signup = () => {
     const [form] = Form.useForm();
-
+    const apiURL = 'api/user/createUser';
     const onFinish = (values) =>{
-        console.log(values);
+
+    const {firstName, lastName, email, password} = values;
+    console.log(password);
+    // password = hashPassword(password);
+
+    const userObject = {
+            firstName,
+            lastName,
+            email,
+            password,
+          };
+    
+    axios.post(BASE_URL+apiURL,userObject)
+    .then((response)=>{
+        if (response.status === 200 )
+            {
+                alert("Success")
+                form.resetFields();
+            }
+        })
+        .catch((error)=>{
+            console.log("Signup error : " + error);
+            alert("Registration Failed")
+        });
     }
 
-    return (
+    return (<>
         <Space className="signup-container">
             <Card
                 style={{
@@ -30,8 +56,9 @@ const Signup = () => {
                         rules={[
                             {
                               required: true,
+                              whitespace:true,
                               message: 'Please input your Firstname!',
-                            },
+                            },                        
                           ]}
                     >
                         <Input/>
@@ -53,6 +80,10 @@ const Signup = () => {
                         name="email"
                         rules={[
                             {
+                                type: 'email',
+                                message: 'The input is not valid E-mail!',
+                              },
+                            {
                               required: true,
                               message: 'Please input your Email address!',
                             },
@@ -70,7 +101,7 @@ const Signup = () => {
                             },
                           ]}
                     >
-                        <Input type="password"/>
+                        <Input.Password/>
                     </Form.Item>
                     <Form.Item
                         label="Confirm Password"
@@ -78,18 +109,27 @@ const Signup = () => {
                         rules={[
                             {
                               required: true,
-                              message: 'Please input confirm password!',
+                              message: 'Please confirm your password!',
                             },
-                          ]}
+                            ({ getFieldValue }) => ({
+                              validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                  return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('The new password that you entered do not match!'));
+                              },
+                            }),
+                          ]}                          
                     >
-                        <Input type="password"/>
+                        <Input.Password/>
                     </Form.Item>
                     <Button type="primary" htmlType="Submit" size="large">Signup</Button>
                 </Form>
 
             </Card>
 
-        </Space>);
+        </Space>
+        </>);
 }
 
 export default Signup;
